@@ -4,16 +4,17 @@ import numpy as np
 def generate_pseudo_observations(target: np.ndarray):
     if isinstance(target, np.ndarray):
         mask = target[:, None] > target
-        return mask[~np.eye(target.size, dtype=bool)]
+        return mask[~np.eye(target.size, dtype=bool)].astype(int)
     else:
         raise ValueError('target should be np.ndarray type')
 
 
 def generate_pseudo_observations_with_ties(target: np.ndarray):
     if isinstance(target, np.ndarray):
-        mask = target[:, None] == target
+        difference = target[:, None] - target
+        mask = np.heaviside(difference, 0.5)
         mask = mask[~np.eye(target.size, dtype=bool)]
-        print(mask)
+        return mask
     else:
         raise ValueError('target should be np.ndarray type')
 
